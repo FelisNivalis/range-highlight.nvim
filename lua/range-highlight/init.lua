@@ -145,7 +145,7 @@ local function add_highlight()
 		end
 	end
 	cache[1], cache[2] = start_line, end_line
-	vim.highlight.range(0, ns, opts.highlight, { start_line, 0 }, { end_line, 0 }, "V", false)
+	vim.highlight.range(0, ns, opts.highlight, { start_line, 0 }, { end_line, 0 }, { regtype = "V", inclusive = false })
 	vim.cmd("redraw")
 end
 
