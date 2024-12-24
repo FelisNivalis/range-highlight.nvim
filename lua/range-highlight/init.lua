@@ -110,7 +110,11 @@ local function get_range_number(cmd)
 
 	-- print('check at the end or transformation', cmd, result.command, result.start_range, result.end_range)
 
-	start_line = start_line - 1
+	if end_line < start_line then
+		start_line, end_line = end_line, start_line
+	end
+
+	start_line, end_line = start_line - 1, end_line - 1
 
 	return start_line, end_line
 end
@@ -129,23 +133,17 @@ local function add_highlight()
 		return
 	end
 
-	if end_line < start_line then
-		start_line, end_line = end_line, start_line
-		start_line = start_line - 1
-		end_line = end_line + 1
-	end
-
 	if cache[1] == start_line and cache[2] == end_line then
 		return
 	end
 
 	if cache[1] and cache[2] then
 		if cache[1] ~= start_line or cache[2] ~= end_line then
-			v.nvim_buf_clear_namespace(0, ns, cache[1], cache[2])
+			v.nvim_buf_clear_namespace(0, ns, cache[1], cache[2] + 1)
 		end
 	end
 	cache[1], cache[2] = start_line, end_line
-	vim.highlight.range(0, ns, opts.highlight, { start_line, 0 }, { end_line, 0 }, { regtype = "V", inclusive = false })
+	vim.highlight.range(0, ns, opts.highlight, { start_line, 0 }, { end_line, 0 }, { regtype = "V", inclusive = true })
 	vim.cmd("redraw")
 end
 
