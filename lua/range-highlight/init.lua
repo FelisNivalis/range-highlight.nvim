@@ -64,8 +64,10 @@ local function get_range_number(cmd)
 	if not result.start_range then
 		-- print('check command', cmd, opts.highlight_with_out_range[result.command])
 		if not opts.highlight_with_out_range[result.command] then
-			v.nvim_buf_clear_namespace(0, ns, 0, -1)
-			vim.cmd("redraw")
+			if cache[1] and cache[2] then
+				cleanup()
+				vim.cmd("redraw")
+			end
 			return -1, -1
 		end
 	end
